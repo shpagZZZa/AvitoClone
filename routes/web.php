@@ -15,10 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('auth.register');
-});
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -35,7 +31,7 @@ Route::get('/profile/{profile}/comments', 'CommentaryController@index')->name('c
 Route::get('/profile/{profile}/new-comment', 'CommentaryController@create')->name('comment.create');
 Route::post('/profile/{profile}/new-comment/store', 'CommentaryController@store')->name('comment.store');
 
-Route::get('/products', 'ProductController@index')->name('products');
+Route::get('/', 'ProductController@index')->name('products');
 Route::get('/product/{product}', 'ProductController@show')->name('product');
 Route::delete('/product/{product}', 'ProductController@delete')->name('product.delete');
 Route::post('/upload-product/store', 'ProductController@store')->name('product.store');

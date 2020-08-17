@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Dto\ProductInfoDto;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -11,8 +12,11 @@ class ProductController extends Controller
 {
     public function index()
     {
+//        $products = array();
+//        foreach (Product::all() as $product)
+//            array_push($products, new ProductInfoDto($product));
         $products = Product::all();
-        return view();
+        return view('product.index', compact('products'));
     }
 
     public function show(Product $product)
@@ -36,7 +40,7 @@ class ProductController extends Controller
 
     public function preview(Request $request)
     {
-        $product = $this->profileValidator($request->all())->validate();
+        $product = $this->productValidator($request->all())->validate();
         $product['user'] = auth()->user();
         $product['images'] = $request->file('images');
         return view('product.preview', compact('product'));
@@ -50,7 +54,7 @@ class ProductController extends Controller
 
     private function saveProduct(Request $request)
     {
-        $data = $this->profileValidator($request->all())->validate();
+        $data = $this->productValidator($request->all())->validate();
         $data['category_id'] = $request->input('category');
         return auth()->user()->profile->products()->create($data);
     }
@@ -69,7 +73,7 @@ class ProductController extends Controller
         }
     }
 
-    private function profileValidator(array $data)
+    private function productValidator(array $data)
     {
         return Validator::make($data, [
             'name' => [],
