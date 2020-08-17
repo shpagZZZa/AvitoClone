@@ -33,6 +33,7 @@ Route::post('/profile/{profile}/new-comment/store', 'CommentaryController@store'
 
 Route::get('/', 'ProductController@index')->name('products');
 Route::get('/product/{product}', 'ProductController@show')->name('product');
+Route::put('/product/{product}', 'ProductController@update')->name('product.update');
 Route::delete('/product/{product}', 'ProductController@delete')->name('product.delete');
 Route::post('/upload-product/store', 'ProductController@store')->name('product.store');
 Route::get('/upload-product', 'ProductController@create')->name('product.create');

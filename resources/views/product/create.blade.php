@@ -18,7 +18,7 @@
 
                     <div class="form-row mt-4">
                         <label for="Категория: ">Категория: </label>
-                        <select name="category" id="category">
+                        <select name="category_id" id="category">
                             <option selected disabled>Выберите категорию</option>
 
                             @foreach($categories as $category)

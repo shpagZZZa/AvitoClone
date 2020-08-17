@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use mysql_xdevapi\Exception;
 
 class ProductController extends Controller
 {
@@ -30,11 +31,28 @@ class ProductController extends Controller
         return view('product.create', compact('categories'));
     }
 
+    public function update(Request $request, Product $product)
+    {
+        $data = Validator::make($request->all(), ['description' => 'required|max:255|string'])->validate();
+        $product->update($data);
+        return redirect()->action('ProductController@show', $product);
+    }
+
     public function store(Request $request)
     {
         $product = $this->saveProduct($request);
         $files = $request->file('image');
-        $this->storeImages($files, $product);
+
+        try
+        {
+            $this->storeImages($files, $product);
+        }
+        catch (Exception $e)
+        {
+            $product->delete();
+            return redirect()->action('ProductController@create');
+        }
+
         return redirect(route('product', $product->id));
     }
 
@@ -55,7 +73,6 @@ class ProductController extends Controller
     private function saveProduct(Request $request)
     {
         $data = $this->productValidator($request->all())->validate();
-        $data['category_id'] = $request->input('category');
         return auth()->user()->profile->products()->create($data);
     }
 
@@ -76,10 +93,11 @@ class ProductController extends Controller
     private function productValidator(array $data)
     {
         return Validator::make($data, [
-            'name' => [],
-            'description' => [],
-            'price' => [],
-            'tags' => [],
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['string', 'max:255'],
+            'price' => ['required'],
+            'tags' => ['string', 'max:255'],
+            'category_id' => ['required',],
         ]);
     }
 }

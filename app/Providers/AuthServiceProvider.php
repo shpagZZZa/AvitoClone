@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Product;
 use App\Models\Profile;
+use App\Policies\ProductPolicy;
 use App\Policies\ProfilePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -17,7 +18,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Profile::class => ProfilePolicy::class,
-        Product::class => Product::class,
+        Product::class => ProductPolicy::class,
     ];
 
     /**
