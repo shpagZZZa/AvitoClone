@@ -10,12 +10,12 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-//        $products = array();
-//        foreach (Product::all() as $product)
-//            array_push($products, new ProductInfoDto($product));
-        $products = Product::all();
+        if ($searchParam = $request->input('search'))
+            $products = Product::where('name', 'like', "%$searchParam%")->get();
+        else
+            $products = Product::all();
         return view('product.index', compact('products'));
     }
 

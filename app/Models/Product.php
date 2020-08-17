@@ -4,9 +4,12 @@ namespace App\Models;
 
 use App\Models\ProductImage;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Product extends Model
 {
+    use Searchable;
+
     public function images()
     {
         return $this->hasMany(ProductImage::class);
